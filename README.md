@@ -16,15 +16,15 @@ pip install -r requirements.txt
 ```
 
 ## Arguments
-`--url`: Target URL(s)
-`--url-file`: File containing a list of target URLs.
-`--payloads`: File containing payloads for injection.
-`--hate-get`: GET parameters to inject into.
-`--hate-post`: POST parameters to inject into.
-`--hate-http-header`: HTTP headers to inject into.
-`--hate-cookie`: Cookies to inject into.
-`--cookie`: Custom cookies to include in requests.
-`-v`, `-vv`, `--verbose`: Verbose output level.
+- `--url`: Target URL(s)
+- `--url-file`: File containing a list of target URLs.
+- `--payloads`: File containing payloads for injection.
+- `--hate-get`: GET parameters to inject into.
+- `--hate-post`: POST parameters to inject into.
+- `--hate-http-header`: HTTP headers to inject into.
+- `--hate-cookie`: Cookies to inject into.
+- `--cookie`: Custom cookies to include in requests.
+- `-v`, `-vv`, `--verbose`: Verbose output level.
 
 ## Usage
 Below are some examples demonstrating how to use Misanthro.py to test for blind injection vulnerabilities.
