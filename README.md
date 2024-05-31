@@ -1,5 +1,5 @@
+![Misanthropy Logo](static/logo.png)
 # Misanthro.py
-
 Misanthro.py is a powerful tool designed to test blind injection vulnerabilities in web applications. This tool automates the process of identifying and exploiting these vulnerabilities by injecting payloads into HTTP headers, cookies, and GET/POST parameters. Misanthropy is intended for use by penetration testers and security researchers.
 
 ## Features
