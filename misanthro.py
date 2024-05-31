@@ -178,7 +178,7 @@ def main():
     print(ASCII_ART)
     print(DESCRIPTION)
 
-    parser = argparse.ArgumentParser(description='Misanthro.py: The Ultimate Blind Injection Testing Tool')
+    parser = argparse.ArgumentParser(description='')
     parser.add_argument('--url', help='Target URL(s) (comma-separated) or path to a file containing URLs')
     parser.add_argument('--url-file', help='Path to a file containing target URLs')
     parser.add_argument('--payloads', required=True, help='Path to the file containing injection payloads')
