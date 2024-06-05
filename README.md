@@ -1,12 +1,12 @@
 ![Misanthropy Logo](static/logo.png)
 # Misanthro.py
-Misanthro.py is a powerful tool designed to test blind injection vulnerabilities in web applications. This tool automates the process of identifying and exploiting these vulnerabilities by injecting payloads into HTTP headers, cookies, and GET/POST parameters. Misanthropy is intended for use by penetration testers and security researchers.
+Misanthro.py is a powerful tool designed to test for blind injection vulnerabilities in web applications. It automates the process of identifying and exploiting these vulnerabilities by injecting payloads into HTTP headers, cookies, and GET/POST parameters. Misanthro.py is intended for use by penetration testers and security researchers.
 
 ## Features
 - Supports injection into HTTP headers, cookies, and GET/POST parameters.
 - Can target multiple URLs simultaneously.
 - Customizable payloads for different types of injections.
-- Verbose output for detailed logging of the attack process.
+- Verbose output for detailed logging of the attack process (misanthro_log.txt).
 
 ## Installation
 To use Misanthro.py, you need to have Python3 installed. You can install the required dependencies using pip:
@@ -16,15 +16,15 @@ pip install -r requirements.txt
 ```
 
 ## Arguments
-- `--url`: Target URL(s)
-- `--url-file`: File containing a list of target URLs.
-- `--payloads`: File containing payloads for injection.
-- `--hate-get`: GET parameters to inject into.
-- `--hate-post`: POST parameters to inject into.
-- `--hate-http-header`: HTTP headers to inject into.
-- `--hate-cookie`: Cookies to inject into.
-- `--cookie`: Custom cookies to include in requests.
-- `-v`, `-vv`, `--verbose`: Verbose output level.
+- `--url`: target URL(s). If multiple, divided by comma (e.g., --url https://test.example.com/login,https://test2.example.com/signup).
+- `--url-file`: file containing a list of target URLs.
+- `--payloads`: file containing payloads for injection.
+- `--hate-get`: GET parameters to inject into. If multiple, divided by comma (e.g., --hate-get redirect_url,r,username,redirect_uri).
+- `--hate-post`: POST parameters to inject into. If multiple, divided by comma (e.g., --hate-post username,password).
+- `--hate-http-header`: HTTP headers to inject into. If multiple, divided by comma (e.g., --hate-http-header User-Agent,X-Forwarded-For,Forwarded,Host).
+- `--hate-cookie`: cookies to inject into. If multiple, divided by comma (e.g., --hate-cookie sessionid,userid).
+- `--cookie`: custom cookies to include in requests (e.g., testing for authenticated targets).
+- `-v`, `-vv`, `--verbose`: verbose output level (-vv is the higher level of verbosity).
 
 ## Usage
 Below are some examples demonstrating how to use Misanthro.py to test for blind injection vulnerabilities.
