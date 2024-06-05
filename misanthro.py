@@ -34,22 +34,21 @@ class Colors:
     GREEN = '\033[92m'
     END = '\033[0m'
 
-# Load payloads from file
-# Load payloads from file
+# Load payloads from file.
 def load_payloads(file_path):
     with open(file_path, 'r') as file:
         return [line.strip() for line in file.readlines()]
 
-# Load URLs from file
+# Load URLs from file.
 def load_urls(file_path):
     with open(file_path, 'r') as file:
         return [line.strip() for line in file.readlines()]
 
-# Dynamic payload injection
+# Dynamic payload injection.
 def inject_dynamic_payload(payload):
     return payload.replace('INJECT_HERE', ''.join(random.choices(string.ascii_letters + string.digits, k=8)))
 
-# Log requests and responses
+# Log requests and responses within a TXT file, namely misanthro_log.txt.
 def log_request_response(url, request, response):
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open('misanthro_log.txt', 'a') as log_file:
@@ -65,7 +64,7 @@ def log_request_response(url, request, response):
             log_file.write(f"{header}: {value}\n")
         log_file.write(f"\n{response.text}\n\n")
 
-# Function to get default cookies from the target URL
+# Function to get default cookies from the target URL.
 def get_default_cookies(url):
     try:
         response = requests.get(url)
@@ -74,13 +73,13 @@ def get_default_cookies(url):
         print(f"{Colors.RED}[!]{Colors.END} Error obtaining default cookies from {Colors.RED}{url}{Colors.END}: {e}")
         return {}
 
-# Function to sanitize headers by replacing INJECT_HERE with a default User-Agent or removing it
+# Function to sanitize headers by replacing INJECT_HERE with a default User-Agent or removing it.
 def sanitize_headers(headers):
     """Replace INJECT_HERE in headers with a default User-Agent or remove if necessary."""
     default_user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
     return {key: (default_user_agent if key == 'User-Agent' and value == 'INJECT_HERE' else value) for key, value in headers.items()}
 
-# Function to sanitize cookies by replacing INJECT_HERE with default values or removing it
+# Function to sanitize cookies by replacing INJECT_HERE with default values or removing it.
 def sanitize_cookies(cookies, default_cookies):
     """Replace INJECT_HERE in cookies with default values from initial GET request or keep the defaults if not targetted."""
     sanitized_cookies = {}
@@ -92,24 +91,24 @@ def sanitize_cookies(cookies, default_cookies):
                 sanitized_cookies[key] = ''
         else:
             sanitized_cookies[key] = value
-    # Add any default cookies that were not originally in cookies
+    # Add any default cookies that were not originally in cookies.
     for key, value in default_cookies.items():
         if key not in sanitized_cookies:
             sanitized_cookies[key] = value
     return sanitized_cookies
 
-# Function to test payloads against a target
+# Function to test payloads against a target.
 def test_payloads(url, payloads, headers, params, cookies, method, verbose):
-    # Get default cookies from an initial GET request to the target URL
+    # Get default cookies from an initial GET request to the target URL.
     default_cookies = get_default_cookies(url)
     
-    # Save default values for headers
+    # Save default values for headers.
     default_headers = {key: value for key, value in headers.items()}
 
     for payload in payloads:
         dynamic_payload = inject_dynamic_payload(payload)
 
-        # Test for GET parameters
+        # Test for GET parameters.
         if method == 'GET' and params:
             for param in params:
                 target_params = {key: (dynamic_payload if key == param else value) for key, value in params.items()}
@@ -123,7 +122,7 @@ def test_payloads(url, payloads, headers, params, cookies, method, verbose):
                 except requests.exceptions.RequestException as e:
                     print(f"{Colors.RED}[!]{Colors.END} Error attacking {Colors.RED}{url}{Colors.END}: {e}")
 
-        # Test for POST parameters
+        # Test for POST parameters.
         elif method == 'POST' and params:
             for param in params:
                 target_params = {key: (dynamic_payload if key == param else value) for key, value in params.items()}
@@ -137,7 +136,7 @@ def test_payloads(url, payloads, headers, params, cookies, method, verbose):
                 except requests.exceptions.RequestException as e:
                     print(f"{Colors.RED}[!]{Colors.END} Error attacking {Colors.RED}{url}{Colors.END}: {e}")
 
-        # Test for HTTP headers
+        # Test for HTTP headers.
         for header in headers:
             if headers[header] == 'INJECT_HERE':
                 headers_copy = {key: (dynamic_payload if key == header else default_headers[key]) for key in default_headers}
@@ -151,7 +150,7 @@ def test_payloads(url, payloads, headers, params, cookies, method, verbose):
                 except requests.exceptions.RequestException as e:
                     print(f"{Colors.RED}[!]{Colors.END} Error attacking {Colors.RED}{url}{Colors.END} with header {Colors.RED}{header}{Colors.END}: {e}")
 
-        # Test for cookies
+        # Test for cookies.
         for cookie in cookies:
             if cookies[cookie] == 'INJECT_HERE':
                 cookies_copy = {key: (dynamic_payload + ';' if key == cookie and not dynamic_payload.endswith(';') else dynamic_payload if key == cookie else default_cookies.get(key, '')) for key in cookies}
@@ -165,15 +164,15 @@ def test_payloads(url, payloads, headers, params, cookies, method, verbose):
                 except requests.exceptions.RequestException as e:
                     print(f"{Colors.RED}[!]{Colors.END} Error attacking {Colors.RED}{url}{Colors.END} with cookie {Colors.RED}{cookie}{Colors.END}: {e}")
 
-# Threaded function for GET parameter testing
+# Threaded function for GET parameter testing.
 def thread_get(url, payloads, params, headers, cookies, verbose):
     test_payloads(url, payloads, headers, params, cookies, 'GET', verbose)
 
-# Threaded function for POST parameter testing
+# Threaded function for POST parameter testing.
 def thread_post(url, payloads, params, headers, cookies, verbose):
     test_payloads(url, payloads, headers, params, cookies, 'POST', verbose)
 
-# Main function
+# Main function.
 def main():
     print(ASCII_ART)
     print(DESCRIPTION)
