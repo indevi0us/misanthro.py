@@ -136,7 +136,7 @@ class HeaderInjector(InjectorBase):
         except Exception as e:
             info(f"Header[{header}] error: {e}")
 
-class CookieInjector(HeaderInjector):
+class CookieInjector(InjectorBase):
     def inject(self, cookie, payload):
         try:
             r = self.client.get(self.url, cookies={cookie: payload}, timeout=10)
@@ -149,7 +149,7 @@ class CookieInjector(HeaderInjector):
         except Exception as e:
             info(f"Cookie[{cookie}] error: {e}")
 
-class GetInjector(HeaderInjector):
+class GetInjector(InjectorBase):
     def inject(self, param, payload):
         try:
             r = self.client.get(self.url, params={param: payload}, timeout=10)
@@ -162,7 +162,7 @@ class GetInjector(HeaderInjector):
         except Exception as e:
             info(f"GET[{param}] error: {e}")
 
-class PostInjector(HeaderInjector):
+class PostInjector(InjectorBase):
     def inject(self, param, payload):
         try:
             r = self.client.post(self.url, data={param: payload}, timeout=10)
