@@ -5,7 +5,7 @@
 
 Designed for high-throughput injection workflows, **Misanthro.py** performs vector discovery from the DOM, supports authenticated sessions via cookie injection, and delivers payloads at scale. It is particularly suited for blind injection testing, especially blind XSS.
 
-The tool does not attempt to interpret application responses. It is built to deliver, not to decide. Execution context, correlation, and exploit validation are expected to be handled externally, through platforms such as [BXSS Hunter](https://bxsshunter.com/) or similar platforms.
+The tool does not attempt to interpret application responses. It is built to deliver, not to decide. Execution context, correlation, and exploit validation are expected to be handled externally, through platforms such as [BXSS Hunter](https://bxsshunter.com/) or similar.
 
 ## Installation
 ```bash
