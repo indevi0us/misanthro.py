@@ -1,5 +1,6 @@
 ![Misanthropy Banner](assets/misanthro.py_banner.png)
 
+## Overview
 **Misanthro.py** is a multi-threaded injection framework built to aggressively target HTTP headers, cookies, GET and POST parameters. It attacks all vectors without exception, using a customizable set of payloads delivered at high speed.
 
 Designed for high-throughput injection workflows, **Misanthro.py** performs vector discovery from the DOM, supports authenticated sessions via cookie injection, and delivers payloads at scale. It is particularly suited for blind injection testing, especially blind XSS.
