@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 
 ## Usage
-Below are some examples demonstrating how to use Misanthro.py to test for blind injection vulnerabilities.
+Below are some examples demonstrating how to use **Misanthro.py** to test for blind injection vulnerabilities.
 
 ### Discovery Only
 Parses the DOM and headers to list potential injection points. No requests are sent with payloads.
