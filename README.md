@@ -1,60 +1,76 @@
-![Misanthropy Logo](static/logo.png)
-# Misanthro.py
-Misanthro.py is a powerful tool designed to test for blind injection vulnerabilities in web applications. It automates the process of identifying and exploiting these vulnerabilities by injecting payloads into HTTP headers, cookies, and GET/POST parameters. Misanthro.py is intended for use by penetration testers and security researchers.
+![Misanthropy Banner](assets/misanthro.py_banner.png)
 
-## Features
-- Supports injection into HTTP headers, cookies, and GET/POST parameters.
-- Can target multiple URLs simultaneously.
-- Customizable payloads for different types of injections.
-- Verbose output for detailed logging of the attack process (misanthro_log.txt).
+Misanthro.py is a multi-threaded injection framework built to aggressively target HTTP headers, cookies, GET and POST parameters. It attacks all vectors without exception, using a customizable set of payloads delivered at high speed.
+
+Designed for high-throughput injection workflows, Misanthro.py performs vector discovery from the DOM, supports authenticated sessions via cookie injection, and delivers payloads at scale. It is particularly suited for blind injection testing, especially blind XSS.
+
+The tool does not attempt to interpret application responses. It is built to deliver, not to decide. Execution context, correlation, and exploit validation are expected to be handled externally, through platforms such as [BXSS Hunter](https://bxsshunter.com/) or similar platforms.
 
 ## Installation
-To use Misanthro.py, you need to have Python3 installed. You can install the required dependencies using pip:
-
 ```bash
+git clone https://github.com/indevi0us/misanthro.py
+cd misanthro.py/
 pip install -r requirements.txt
 ```
 
 ## Arguments
-- `--url`: target URL(s). If multiple, divided by comma (e.g., --url https://test.example.com/login,https://test2.example.com/signup).
-- `--url-file`: file containing a list of target URLs.
-- `--payloads`: file containing payloads for injection.
-- `--hate-get`: GET parameters to inject into. If multiple, divided by comma (e.g., --hate-get redirect_url,r,username,redirect_uri).
-- `--hate-post`: POST parameters to inject into. If multiple, divided by comma (e.g., --hate-post username,password).
-- `--hate-http-header`: HTTP headers to inject into. If multiple, divided by comma (e.g., --hate-http-header User-Agent,X-Forwarded-For,Forwarded,Host).
-- `--hate-cookie`: cookies to inject into. If multiple, divided by comma (e.g., --hate-cookie sessionid,userid).
-- `--cookie`: custom cookies to include in requests (e.g., testing for authenticated targets).
-- `-v`, `-vv`, `--verbose`: verbose output level (-vv is the higher level of verbosity).
+
+| Argument             | Type      | Description                                                                 |
+|----------------------|-----------|-----------------------------------------------------------------------------|
+| `--url`              | `string`  | Target URL.                                                                |
+| `--all`              | `flag`    | Runs automatic discovery, then attacks all discovered vectors.             |
+| `--discovery`        | `flag`    | Performs vector discovery only (headers, cookies, GET, POST).              |
+| `--headers`          | `string`  | Comma-separated list of HTTP headers to inject.                            |
+| `--cookies`          | `string`  | Comma-separated list of cookie names to inject.                            |
+| `--get`              | `string`  | Comma-separated list of GET parameters to inject.                          |
+| `--post`             | `string`  | Comma-separated list of POST parameters to inject.                         |
+| `--payloads`         | `string`  | Path to a YAML, JSON, or plaintext payload file. Default: `payloads.yaml`. |
+| `--auth-cookies`     | `string`  | Authenticated session cookies in `"name=value; name2=value2"` format.      |
+| `--threads`          | `int`     | Number of concurrent threads. Default: `10`.                               |
+| `--rate-limit`       | `float`   | Delay in seconds between requests. Default: `0.0`.                         |
+| `--help`             | `flag`    | Holds your hand and shows you the way out.                                 |
+
 
 ## Usage
 Below are some examples demonstrating how to use Misanthro.py to test for blind injection vulnerabilities.
 
-### Injecting into GET parameters
+### Discovery Only
+Parses the DOM and headers to list potential injection points. No requests are sent with payloads.
 ```bash
-python misanthro.py --url http://example.com/sample --payloads payloads.txt --hate-get param1,param2 -vv
+python3 misanthro.py --url https://target.com --discovery
 ```
-This command targets http://example.com and injects payloads from payloads.txt into the GET parameters `param1` and `param2`.
 
-### Injecting into HTTP headers
+### Full Auto
+Discovers all injectable vectors (headers, cookies, GET, POST) and injects all payloads into every one of them.
 ```bash
-python misanthro.py --url http://example.com/sample --payloads payloads.txt --hate-http-header User-Agent,X-Forwarded-For -vv
+python3 misanthro.py --url https://target.com --all --payloads payloads.yaml
 ```
-This command targets http://example.com and injects payloads from payloads.txt into the HTTP headers `User-Agent` and `X-Forwarded-For`.
 
-### Injecting into cookies
+### Targeting Specific Vectors
+Skip discovery and attack only the explicitly specified vectors.
 ```bash
-python misanthro.py --url http://example.com/sample --payloads payloads.txt --hate-cookie sessionid,userid -vv
+python3 misanthro.py --url https://target.com \
+  --headers X-Forwarded-For,User-Agent \
+  --cookies session_id \
+  --get q,search \
+  --post comment \
+  --payloads payloads.yaml
 ```
-This command targets http://example.com and injects payloads from payloads.txt into the cookies `sessionid` and `userid`.
 
-### Targeting multiple URLs in-line
+### Authenticated Scan
+Injects in authenticated requests using supplied cookies.
 ```bash
-python misanthro.py --url http://example.com/sample,http://example.com/sample2 --payloads payloads.txt --hate-get param1,param2 -vv
+python3 misanthro.py --url https://target.com \
+  --all \
+  --auth-cookies "session=abc123; jwt=xyz456" \
+  --payloads payloads.yaml
 ```
-This command targets http://example.com on both the endpoints /sample and /sample2, injecting payloads from payloads.txt into the GET parameters `param1` and `param2` for all the URLs provided.
 
-### Targeting multiple URLs from a .txt file
+### Rate-Limited Testing
+Injects payloads with a 0.5s delay between each request. Useful for avoiding rate-limiting or evading WAF heuristics.
 ```bash
-python misanthro.py --url-file urls.txt --payloads payloads.txt --hate-get param1,param2 -vv
+python3 misanthro.py --url https://target.com \
+  --all \
+  --payloads payloads.yaml \
+  --rate-limit 0.5
 ```
-This command reads URLs from urls.txt and injects payloads from payloads.txt into the GET parameters `param1` and `param2`.
