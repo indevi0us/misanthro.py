@@ -255,10 +255,10 @@ def main():
         sys.exit(0)
 
     vectors = {
-        "headers": args.headers.split(",") if args.headers else discovered.get("headers", []),
-        "cookies": args.cookies.split(",") if args.cookies else discovered.get("cookies", []),
-        "get": args.get.split(",") if args.get else discovered.get("get", []),
-        "post": args.post.split(",") if args.post else discovered.get("post", [])
+        "headers": [h.strip() for h in args.headers.split(",") if h.strip()] if args.headers else discovered.get("headers", []),
+        "cookies": [c.strip() for c in args.cookies.split(",") if c.strip()] if args.cookies else discovered.get("cookies", []),
+        "get": [g.strip() for g in args.get.split(",") if g.strip()] if args.get else discovered.get("get", []),
+        "post": [p.strip() for p in args.post.split(",") if p.strip()] if args.post else discovered.get("post", [])
     } if not args.all else discovered
 
     vectors["headers"] = [h for h in vectors["headers"] if h.lower() not in BLACKLIST_HEADERS]
